@@ -21,7 +21,7 @@ class RemoteInfo(BaseModel):
 class VersionBase(BaseModel):
     id: str = Field(..., description="Unique version identifier")
     name: str = Field(..., description="Version display name")
-    type: Literal["beta", "stable", "latest", "tag"] = Field(
+    type: str = Field(
         ..., description="Version type classification"
     )
     remote: RemoteInfo = Field(

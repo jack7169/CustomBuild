@@ -412,6 +412,16 @@ function setSpinnerToDiv(id, message) {
     }
 }
 
+// shows an error message inside the division with given id
+function setErrorToDiv(id, message) {
+    let element = document.getElementById(id);
+    if (element) {
+        element.innerHTML = '<div class="alert alert-danger mb-0 py-2" role="alert">' +
+                                '<i class="bi bi-exclamation-triangle-fill me-2"></i>' + message +
+                            '</div>';
+    }
+}
+
 function fetchVehicles() {
     // following elemets will be blocked (disabled) when we make the request
     let elements_to_block = ['vehicle', 'version', 'board', 'submit', 'reset_def', 'exp_col_button'];
@@ -438,7 +448,8 @@ function fetchVehicles() {
             updateVehicles(all_vehicles, new_vehicle);
         })
         .catch((message) => {
-            console.log("Vehicle update failed. "+message);
+            console.error("Vehicle update failed. "+message);
+            setErrorToDiv('vehicle_list', 'Failed to load vehicles. Please try refreshing the page.');
         })
         .finally(() => {
             enableDisableElementsById(elements_to_block, true);
@@ -481,7 +492,8 @@ function onVehicleChange(new_vehicle_id) {
             updateVersions(all_versions, new_version);
         })
         .catch((message) => {
-            console.log("Version update failed. "+message);
+            console.error("Version update failed. "+message);
+            setErrorToDiv('version_list', 'Failed to load versions for this vehicle.');
         })
         .finally(() => {
             enableDisableElementsById(elements_to_block, true);
@@ -538,7 +550,8 @@ function onVersionChange(new_version) {
             updateBoards(boards, new_board);
         })
         .catch((message) => {
-            console.log("Boards update failed. "+message);
+            console.error("Boards update failed. "+message);
+            setErrorToDiv('board_list', 'Failed to load boards for this version.');
         })
         .finally(() => {
             enableDisableElementsById(elements_to_block, true);
@@ -582,7 +595,13 @@ function onBoardChange(new_board) {
             }
         })
         .catch((message) => {
-            console.log("Features update failed. "+message);
+            console.error("Features update failed. "+message);
+            let features_element = document.getElementById('build_options');
+            if (features_element) {
+                features_element.innerHTML = '<div class="alert alert-danger" role="alert">' +
+                    '<i class="bi bi-exclamation-triangle-fill me-2"></i>Failed to load features for this board.' +
+                    '</div>';
+            }
         });
 }
 
@@ -760,16 +779,19 @@ function compareVersionNums(a, b) {
 
 function sortVersions(versions) {
     const order = {
-        "beta"  : 0,
-        "latest": 1,
-        "stable": 2,
-        "tag"   : 3,
+        "beta"   : 0,
+        "latest" : 1,
+        "stable" : 2,
+        "tag"    : 3,
+        "custom" : 4,
+        "Custom" : 4,
     }
+    const defaultOrder = 5;
 
     versions.sort((a, b) => {
         // sort the version types in order mentioned above
         if (a.type != b.type) {
-            return order[a.type] - order[b.type];
+            return (order[a.type] ?? defaultOrder) - (order[b.type] ?? defaultOrder);
         }
 
         // for numbered versions, do reverse sorting to make sure recent versions come first

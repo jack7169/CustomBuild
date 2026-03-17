@@ -344,6 +344,10 @@ class GitRepo:
             # skip conversion if commit_ref is already hex string
             return commit_ref
 
+        # Normalize bare branch/tag names to full ref format
+        if not commit_ref.startswith('refs/'):
+            commit_ref = f'refs/heads/{commit_ref}'
+
         # allow branches and tags only for now
         allowed_ref_types = ['tags', 'heads']
         split_ref = commit_ref.split('/', 2)
