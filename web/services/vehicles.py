@@ -181,10 +181,14 @@ class VehiclesService:
                 commit_ref=version_info.commit_ref
             )
 
-        # Try to fetch board-specific defaults from firmware-server
+        # Try to fetch board-specific defaults from firmware-server.
+        # Only use firmware-server defaults for official ArduPilot builds,
+        # since custom remotes point to the official artifacts URL which
+        # may have different feature defaults than the fork's code.
         board_defaults = None
+        is_official = version_info.remote_info.name == 'ardupilot'
         artifacts_dir = version_info.ap_build_artifacts_url
-        if artifacts_dir is not None:
+        if is_official and artifacts_dir is not None:
             board_defaults = (
                 self.ap_src_metadata_fetcher.get_board_defaults_from_fw_server(
                     artifacts_url=artifacts_dir,
