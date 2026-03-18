@@ -260,9 +260,21 @@ const Features = (() => {
     }
 
     function applyDefaults() {
+        // Pass 1: set each feature to its default state without
+        // triggering dependency updates (avoids ordering issues)
         features.forEach(feature => {
             const check = featureisEnabledByDefault(feature.id);
-            checkUncheckOptionById(feature.id, check);
+            checkUncheckOptionById(feature.id, check, false);
+        });
+
+        // Pass 2: enable dependencies for all enabled features.
+        // This ensures that if a feature is enabled by default,
+        // all its dependencies are also enabled (even if the
+        // firmware-server data has inconsistencies).
+        features.forEach(feature => {
+            if (featureisEnabledByDefault(feature.id)) {
+                enableDependenciesForFeature(feature.id);
+            }
         });
     }
 
