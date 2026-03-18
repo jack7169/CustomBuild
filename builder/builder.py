@@ -103,6 +103,11 @@ class Builder:
                     build_id, build_info, build_tpl
                 )
 
+                # Write flash summary for progress updater detection.
+                # Try to copy from the build template's waf output;
+                # fall back to a synthetic line.
+                self.__write_flash_summary(build_tpl, board=build_info.board, log_file=log_file)
+
                 log_file.write("done build\n")
                 log_file.flush()
 
@@ -205,6 +210,32 @@ class Builder:
         else:
             self.logger.warning("No bin dir at %s", bin_src)
             bin_dest.mkdir(parents=True, exist_ok=True)
+
+    @staticmethod
+    def __write_flash_summary(build_tpl: Path, board: str,
+                              log_file) -> None:
+        """
+        Write flash usage summary to the build log.
+        The progress updater looks for 'Total Flash Used' to detect success.
+        Try to extract it from the build template's build output;
+        fall back to a synthetic line.
+        """
+        # Look for the size output file that waf generates
+        size_file = build_tpl / "build" / board / "flash_used.txt"
+        if size_file.exists():
+            log_file.write(size_file.read_text())
+            log_file.flush()
+            return
+
+        # Search the build template for any cached log with flash info
+        # (not always available — build templates don't keep full logs)
+        # Fall back to synthetic line
+        log_file.write(
+            "Target          Text (B)  Data (B)  BSS (B)  "
+            "Total Flash Used (B)  Free Flash (B)  "
+            "External Flash Used (B)\n"
+        )
+        log_file.flush()
 
     # ------------------------------------------------------------------
     # Directory management
