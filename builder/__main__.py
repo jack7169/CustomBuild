@@ -5,6 +5,7 @@ import logging
 from ap_git import GitRepo
 from build_manager import BuildManager
 from builder import Builder
+from shared_repo import SharedRepoManager
 from metadata_manager import (
     APSourceMetadataFetcher,
     VehiclesManager,
@@ -40,13 +41,25 @@ if __name__ == "__main__":
     basedir = os.path.abspath(os.getenv("CBS_BASEDIR"))
     workdir = os.path.abspath('/workdir')
 
-    repo = GitRepo.clone_if_needed(
+    # Shared golden repo (used by builder for worktrees + build caching)
+    shared_repo_dir = os.environ.get(
+        "SHARED_ARDUPILOT_DIR",
+        os.path.join(workdir, "shared-ardupilot"),
+    )
+    shared_repo_mgr = SharedRepoManager(
+        repo_path=shared_repo_dir,
+        clone_url="https://github.com/ardupilot/ardupilot.git",
+    )
+
+    # Metadata repo (separate clone for APSourceMetadataFetcher —
+    # it checks out commits to read build options from source tree)
+    metadata_repo = GitRepo.clone_if_needed(
         source="https://github.com/ardupilot/ardupilot.git",
-        dest=os.path.join(workdir, 'ardupilot'),
+        dest=os.path.join(basedir, 'ardupilot'),
     )
 
     ap_metafetch = APSourceMetadataFetcher(
-        ap_repo=repo
+        ap_repo=metadata_repo
     )
 
     vehicles_manager = VehiclesManager()
@@ -59,7 +72,6 @@ if __name__ == "__main__":
 
     builder = Builder(
         workdir=workdir,
-        source_repo=repo,
     )
 
     # Set up signal handlers for graceful shutdown
