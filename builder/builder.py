@@ -141,9 +141,23 @@ class Builder:
         """
         Generate extra_hwdef.dat content as a string.
         Also writes it to the per-build workdir for archiving.
+
+        When no features are selected, generates an empty hwdef
+        so the build uses the board's built-in defaults.
         """
         log_file.write("Generating extrahwdef...\n")
         log_file.flush()
+
+        # No feature selection = use board defaults (empty hwdef)
+        if not build_info.selected_features:
+            log_file.write("  No features selected, using board defaults\n")
+            log_file.flush()
+            content = "# No feature overrides — using board defaults\n"
+            hwdef_path = self.__get_path_to_extra_hwdef(build_id)
+            os.makedirs(os.path.dirname(hwdef_path), exist_ok=True)
+            with open(hwdef_path, "w") as f:
+                f.write(content)
+            return content
 
         all_features = apfetch.get_singleton().get_build_options_at_commit(
             remote=build_info.remote_info.name,
