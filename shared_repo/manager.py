@@ -278,11 +278,22 @@ class SharedRepoManager:
         if tpl_path.exists():
             shutil.rmtree(tpl_path, ignore_errors=True)
 
+        # Unlock any stale lock and prune missing worktrees
+        self._run(
+            ["git", "worktree", "unlock", str(tpl_path)],
+            cwd=self._repo, timeout=10, check=False,
+        )
+        self._run(
+            ["git", "worktree", "prune"],
+            cwd=self._repo, timeout=30, check=False,
+        )
+
         # Create worktree
         self._log(log_file,
                   f"  Creating worktree at {tpl_path.name}...\n")
         self._run(
-            ["git", "worktree", "add", "--detach", str(tpl_path), commit],
+            ["git", "worktree", "add", "--force", "--detach",
+             str(tpl_path), commit],
             cwd=self._repo, timeout=120, log_file=log_file,
         )
 
