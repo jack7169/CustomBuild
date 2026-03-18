@@ -182,13 +182,26 @@ class VehiclesService:
             )
 
         # Try to fetch board-specific defaults from firmware-server.
-        # Only use firmware-server defaults for official ArduPilot builds,
-        # since custom remotes point to the official artifacts URL which
-        # may have different feature defaults than the fork's code.
+        # Custom remotes inherit the "latest" artifacts URL, but their
+        # code may be based on an older stable release with different
+        # defaults. Use stable-4.6 artifacts as a safer fallback for
+        # non-official remotes, since "latest" may disable features
+        # that older branches still need.
         board_defaults = None
-        is_official = version_info.remote_info.name == 'ardupilot'
         artifacts_dir = version_info.ap_build_artifacts_url
-        if is_official and artifacts_dir is not None:
+        if artifacts_dir is not None:
+            # For non-ardupilot remotes, prefer stable artifacts over
+            # "latest" to avoid feature mismatch with older forks
+            if (version_info.remote_info.name != 'ardupilot'
+                    and '/latest' in artifacts_dir):
+                # Find the latest stable version for this vehicle to
+                # get accurate board defaults
+                stable_url = self._get_latest_stable_artifacts_url(
+                    vehicle_id
+                )
+                if stable_url:
+                    artifacts_dir = stable_url
+
             board_defaults = (
                 self.ap_src_metadata_fetcher.get_board_defaults_from_fw_server(
                     artifacts_url=artifacts_dir,
@@ -243,6 +256,32 @@ class VehiclesService:
 
         # Sort by name
         return sorted(features, key=lambda x: x.category.name)
+
+    def _get_latest_stable_artifacts_url(
+        self, vehicle_id: str
+    ) -> str | None:
+        """
+        Find the latest stable version's artifacts URL for a vehicle.
+        Used as a fallback for custom remotes that point to 'latest'
+        artifacts which may have divergent feature defaults.
+        """
+        versions = self.versions_fetcher.get_versions_for_vehicle(
+            vehicle_id=vehicle_id
+        )
+        # Find stable versions from the ardupilot remote, sorted desc
+        stables = [
+            v for v in versions
+            if v.release_type == 'stable'
+            and v.remote_info.name == 'ardupilot'
+            and v.ap_build_artifacts_url
+        ]
+        if not stables:
+            return None
+        # Sort by version number descending to get latest stable
+        stables.sort(
+            key=lambda v: v.version_number or '', reverse=True
+        )
+        return stables[0].ap_build_artifacts_url
 
     def get_feature(
         self,
