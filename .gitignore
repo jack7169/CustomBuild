@@ -136,3 +136,4 @@ dump.rdb
 
 # base directory
 base
+.DS_Store
