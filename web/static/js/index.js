@@ -116,7 +116,7 @@ function updateBuildsTable(builds) {
         row_num += 1;
     });
 
-    let table_html =    `<table class="table table-hover table-light shadow">
+    let table_html =    `<table class="table table-hover shadow">
                             <thead class="table-dark">
                                 <th scope="col" style="width: 5%">Status</th>
                                 <th scope="col" style="width: 5%">Age</th>

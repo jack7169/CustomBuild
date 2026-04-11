@@ -1,30 +1,26 @@
 @charset "utf-8";
-/* CSS Document */
+/* CSS Document — Dark Theme */
 
 /* Background-Styles */
 body {
-	font-family:Helvetica;
-	margin:0px;
-	padding:0px;
-	background-color: #fff;
-    background-image: url(/static/images/bg.png);
+	font-family: Helvetica;
+	margin: 0px;
+	padding: 0px;
+	background-color: #1a1d21;
 }
 
 #logo {
-    background-image:url(/static/images/logo.png);
-	background-repeat:no-repeat;
-    height: 140px;
+	background-image: url(/static/images/logo.png);
+	background-repeat: no-repeat;
+	height: 140px;
 	width: 407px;
-	-moz-box-shadow: 2px 2px 5px #888;
-	-webkit-box-shadow: 2px 2px 5px #888;
-	box-shadow: 2px 2px 5px #888;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 	background-color: #000;
 }
-  
+
 h2 {
-	text-shadow: #ccc 0px 1px 0px;
-	text-decoration:none;
-	color:#D14836;
+	text-decoration: none;
+	color: #e05545;
 	padding-top: 0px;
 	padding-right: 5px;
 	padding-bottom: 5px;
@@ -32,37 +28,36 @@ h2 {
 }
 
 #git {
-	background-color: #FFF;
+	background-color: #212529;
 	font-size: 15px;
 	display: auto;
 	padding: 10px;
-	border: 1px solid #CCC;
+	border: 1px solid #373b3e;
 	position: relative;
-	-moz-box-shadow: 2px 2px 5px #888;
-	-webkit-box-shadow: 2px 2px 5px #888;
-	box-shadow: 2px 2px 5px #888;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+	color: #dee2e6;
 }
 
 #git a {
-	color:#00F;
+	color: #6ea8fe;
 	font-weight: normal;
-	}
-	
+}
+
 #git a:hover {
-	color:#D14836;
+	color: #e05545;
 }
 
 .passed-text {
-	color:green;
+	color: #5cb85c;
 }
 
 .failed-text {
-	color:red;
+	color: #e05545;
 }
 
 
 #main {
-	padding-top:0px;
+	padding-top: 0px;
 	min-width: 420px;
 	margin-top: 0;
 	margin-right: auto;
@@ -72,120 +67,120 @@ h2 {
 	padding-bottom: 50px;
 	padding-left: 20px;
 }
-  
+
 ul#testresults {
-	background-color: #FFF;
+	background-color: #212529;
 	display: block;
 	padding: 10px;
-	border: 1px solid #CCC;
+	border: 1px solid #373b3e;
 	list-style-type: none;
 	position: relative;
-    -moz-box-shadow: 2px 2px 5px #888;
-    -webkit-box-shadow: 2px 2px 5px #888;
-    box-shadow: 2px 2px 5px #888;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
 }
 
 ul#testresults li {
 	list-style-type: none;
 	display: block;
-	background-color: #eef1f1;
+	background-color: #2b3035;
 	margin: 5px;
 	padding: 5px;
-		}
+	color: #dee2e6;
+}
 
 ul#testlogs {
-	background-color: #FFF;
+	background-color: #212529;
 	display: block;
 	padding: 10px;
-	border: 1px solid #CCC;
+	border: 1px solid #373b3e;
 	list-style-type: none;
 	position: relative;
-    -moz-box-shadow: 2px 2px 5px #888;
-    -webkit-box-shadow: 2px 2px 5px #888;
-    box-shadow: 2px 2px 5px #888;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
 }
 
 ul#testlogs li {
-	text-decoration:none;
+	text-decoration: none;
 	list-style-type: none;
 	display: block;
-	background-color: #eef1f1;
+	background-color: #2b3035;
 	margin: 5px;
 	padding: 5px;
 	font-size: 15px;
-		}
-		
+	color: #dee2e6;
+}
+
 
 ul#testlogs li a {
-	text-decoration:none;
-	color:#8aa19c;
+	text-decoration: none;
+	color: #6ea8fe;
 	font-weight: bold;
 	font-size: 12px;
-	}
-	
+}
+
 ul#testlogs li a:hover {
-	color:#D14836;
+	color: #e05545;
 }
 
 .status-table {
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 0.9em;
+	font-family: sans-serif;
+	min-width: 400px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
 .status-table thead tr {
-    background-color: #009879;
-    color: #ffffff;
-    text-align: left;
+	background-color: #0f6848;
+	color: #ffffff;
+	text-align: left;
 }
 
 .status-table th,
 .status-table td {
-    padding: 12px 15px;
+	padding: 12px 15px;
 }
 
 .status-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+	border-bottom: 1px solid #373b3e;
+	color: #dee2e6;
 }
 
 .status-table tbody tr.Failed {
-    font-weight: bold;
-    background-color: rgba(255,0,0,0.2);
+	font-weight: bold;
+	background-color: rgba(220, 53, 69, 0.25);
 }
 
 .status-table tbody tr.Error {
-    font-weight: bold;
-    background-color: rgba(255,0,0,0.2);
+	font-weight: bold;
+	background-color: rgba(220, 53, 69, 0.25);
 }
 
 .status-table tbody tr.Pending {
-    font-weight: bold;
-    background-color: rgba(128,128,0,0.1);
+	font-weight: bold;
+	background-color: rgba(255, 193, 7, 0.15);
 }
 
 .status-table tbody tr.Finished {
-    font-weight: bold;
-    background-color: rgba(0,255,0,0.1);
+	font-weight: bold;
+	background-color: rgba(40, 167, 69, 0.15);
 }
 
 .status-table tbody tr.Running {
-    font-weight: bold;
-    background-color: rgba(0,255,0,0.15);
-}
-.collapsibleList li{
-  list-style-image : url('/static/images/bg.png');
-  cursor           : auto;
+	font-weight: bold;
+	background-color: rgba(40, 167, 69, 0.2);
 }
 
-li.collapsibleListOpen{
-  list-style-image : url('/static/images/button-open.png');
-  cursor           : pointer;
+.collapsibleList li {
+	list-style-image: url('/static/images/bg.png');
+	cursor: auto;
 }
 
-li.collapsibleListClosed{
-  list-style-image : url('/static/images/button-closed.png');
-  cursor           : pointer;
+li.collapsibleListOpen {
+	list-style-image: url('/static/images/button-open.png');
+	cursor: pointer;
+}
+
+li.collapsibleListClosed {
+	list-style-image: url('/static/images/button-closed.png');
+	cursor: pointer;
 }
